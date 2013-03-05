@@ -1,0 +1,17 @@
+#/bin/bash
+read -p "Enter username :- " uname
+cat /etc/passwd | awk -F : '{print $1}' > usernames
+#cut -f 1 -d : /etc/passwd > usernames
+count=1
+for i in $(more  "userlist")
+do 
+  if [ $i = $uname  ] ; then
+	count=$((count + count))
+	fi
+done
+if [ $count = 2 ] ; then
+echo "Username exist"
+cat /etc/passwd | grep $uname
+else
+echo "does not exist"
+fi
