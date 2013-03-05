@@ -1,0 +1,11 @@
+counter=1
+while [ $counter -le 100 ]
+do
+        echo "Welcone $counter times"
+#       cat list.txt | awk -F : '{print $2}' >> user.list
+less list.txt | cut -f $counter -d : >> user.list
+        (( counter++ ))
+done
+#cat list.txt | awk -F : '{print $($counter)}' >> user.list
+#counter=$((counter + counter))
+#echo $counter
