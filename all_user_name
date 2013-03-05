@@ -1,0 +1,5 @@
+for i in $(more "usernames.txt")
+do 
+echo "username = $i"
+done
+
