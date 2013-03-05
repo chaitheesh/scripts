@@ -1,0 +1,98 @@
+#!/bin/sh
+
+echo "Select a catgory Number.
+1=Useradd
+2=Userdelete
+3=Search a User
+4=Add into sudoers
+5=Exit"
+read NUM
+
+case $NUM in
+  1)  read -p "Enter username : " uname
+                egrep "^$uname" /etc/passwd > /dev/null
+                if [ $? = 0 ]; then
+                echo 'UserAccount already Exist'
+                else
+                read -p "Enter passwd " paswd
+  		echo "select the shell "
+		cat /etc/shells
+		echo " "
+		read shels
+                read -p "Select the Group name (users, appl) " gps
+                useradd $uname -s $shels -G $gps
+                echo ${paswd} | passwd --stdin ${uname}
+                fi
+                exit 0
+;;
+	2) read -p "Enter username : " uname
+#		egrep "^$uname" /etc/passwd > /dev/null
+#               if [ $? = 0 ]; then
+#		read -p "You wanna delete the user (y/n) ?" ans
+#		if [ $ans = 'y' ]; then
+#			 userdel -r $uname
+#			echo "deleted"
+#		fi
+#		else
+#		echo "User name doesnot exist"
+#		fi
+#		exit 0 
+ 		cat /etc/passwd | awk -F : '{print $1}' > usernames
+                #cut -f 1 -d : /etc/passwd > usernames
+                count=1
+                for i in $(more  "usernames")
+                do
+  	             	if [ $i = $uname  ] ; then
+        	        count=$((count + count))
+               		fi
+                done
+                if [ $count = 2 ] ; then
+                echo "Username exist $uname  "
+                read -p "you wanna delete this User accout y/n " ans
+			if [ $ans = 'y' ]; then
+				userdel -r $uname
+			fi
+                else
+                echo "Username does not exist"
+                fi
+                exit 0
+
+;;
+	3) read -p "enter the username  " uname
+		cat /etc/passwd | awk -F : '{print $1}' > usernames
+		#cut -f 1 -d : /etc/passwd > usernames
+		count=1
+		for i in $(more  "usernames")
+		do
+	        	if [ $i = $uname  ] ; then
+		        count=$((count + count))
+		       fi
+		done
+		if [ $count = 2 ] ; then
+		echo "Username exist"
+		cat /etc/passwd | grep $uname
+		else
+		echo "User name does not exist"
+		fi
+		exit 0
+ ;;
+	4) read -p "Enter the username " uname
+		cat /etc/passwd | awk -F : '{print $1}' > usernames
+		count=1
+		for i in $(more "usernames")
+		do 
+			if [ $i = $uname ]; then
+			count=$((count + count))
+			fi
+		done
+		if [ $count = 2 ]; then
+			usermod -G wheel $uname
+			echo "User $uname added into sudoers"
+		else
+		echo "User name does not exist"
+		fi
+		exit 0
+ ;;
+	5) exit 0 ;;
+	*) echo "INVALID NUMBER! Exiting... ";;
+esac
