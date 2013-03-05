@@ -1,0 +1,3 @@
+#/bin/bash
+var=`hostname`
+echo "runnning in server- $var"
