@@ -1,0 +1,11 @@
+#/bin/bash
+read -p "Enter username ; " uname
+cut -f 1 -d : /etc/passwd > username
+for i in username
+do 
+  if [ $i = $uname ] ; then
+		echo "username exist"
+		else
+	#echo "not exust"
+	fi
+done
