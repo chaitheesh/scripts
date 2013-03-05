@@ -1,0 +1,15 @@
+#/bin/bash
+echo "Test pgm"
+
+  	read -p "Enter username : " uname
+		egrep "^$uname" /etc/passwd > /dev/null
+		if [ $? = 0 ]; then
+		echo 'UserAccount already Exist'
+		else 
+		read -p "Enter passwd " paswd
+		read -p "Enter shell (/bin/sh, /bin/bash) " shels
+		read -p "Select the Group name (users, appl) " gps
+		useradd $uname -s $shels -G $gps
+		echo ${paswd} | passwd --stdin ${uname}
+		fi
+		exit 0
