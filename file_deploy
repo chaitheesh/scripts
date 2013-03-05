@@ -1,0 +1,65 @@
+#/bin/bash
+#Scripe Name = deploy file
+#Auther = Chaitheesh
+#Dated= 31-01-2013
+echo "------------------------------------------------------------------------------------------"
+read -p "Enter your login credintial " user_name
+echo " "
+#Back up the current files from /var/www/site
+
+if [[ -d "/var/www/site_copy" ]] ; then
+  echo "Removing old site backup "
+	rm -rf /var/www/site_copy
+	cp -arp /var/www/site /var/www/site_copy
+	echo "Backup of current site done successfully"
+	sleep 0.8
+else
+	cp -arp /var/www/site /var/www/site_copy
+	echo "Backup the current site completed.."
+fi
+echo " "
+#ls -l /var/www/
+echo "Extracting the tar archive"
+if [[ -d "/home/$user_name/code_dirs" ]]; then
+	echo "Removing old cod_dirs"
+	rm -rf /home/$user_name/code_dirs
+	tar -zxf /home/$user_name/code_dirs.tar.gz -C /home/$user_name/  2> /var/log/tar.err.log
+        sleep 0.5
+        echo "Extracted tar archive successfully"
+
+else
+	tar -zxf /home/$user_name/code_dirs.tar.gz -C /home/$user_name/  2> /var/log/tar.err.log
+	sleep 0.5 
+	echo "Extracted tar archive successfully"
+fi
+echo " "
+#cd /home/$user_name/code_dirs
+#echo "The contents moved are"
+#ls -l /home/$user_name/code_dirs
+#changing the permissions
+chown -R root:apache  /home/$user_name/code_dirs
+	#for i in `ls -1 /home/$user_name/code_dirs/`
+	#do
+echo "Copying community directory.."
+	sleep 0.5
+	cp -r /home/$user_name/code_dirs/app/code/community /var/www/site_copy/app/code/
+echo "Copying local directory.."
+	sleep 0.5
+	cp -r /home/$user_name/code_dirs/app/code/local /var/www/site_copy/app/code/
+echo "Copying design directory.."
+	sleep 0.5
+	cp -r /home/$user_name/code_dirs/app/design /var/www/site_copy/app/
+echo "Copying modules directory.."
+	sleep 0.5
+	cp -r /home/$user_name/code_dirs/app/etc/modules /var/www/site_copy/app/etc/
+echo "Copying js directory.."
+	sleep 0.5
+	cp -r /home/$user_name/code_dirs/js /var/www/site_copy/
+echo "Copying skin directory.."
+	sleep 0.5
+	cp -r /home/$user_name/code_dirs/skin /var/www/site_copy/
+#done
+sleep 0.8
+echo " "
+echo "Done........"
+echo "------------------------------------------------------------------------------------------"
